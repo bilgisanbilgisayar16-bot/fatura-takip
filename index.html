@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FaturaTakip — Fatura & Ödeme Yönetimi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-icon">₺</span>
+      <span class="brand-name">FaturaTakip</span>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')">
+        <span class="nav-icon">◈</span> Dashboard
+      </button>
+      <button class="nav-item" data-page="faturalar" onclick="navigate('faturalar')">
+        <span class="nav-icon">◧</span> Faturalar
+      </button>
+      <button class="nav-item" data-page="odemeler" onclick="navigate('odemeler')">
+        <span class="nav-icon">◫</span> Ödemeler
+      </button>
+      <button class="nav-item" data-page="musteriler" onclick="navigate('musteriler')">
+        <span class="nav-icon">◻</span> Müşteriler
+      </button>
+      <button class="nav-item" data-page="raporlar" onclick="navigate('raporlar')">
+        <span class="nav-icon">◪</span> Raporlar
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="btn-export" onclick="exportData()">⬇ Dışa Aktar</button>
+      <button class="btn-export" onclick="importData()">⬆ İçe Aktar</button>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="handleImport(event)"/>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content">
+    <header class="topbar">
+      <button class="hamburger" onclick="toggleSidebar()">☰</button>
+      <div class="topbar-title" id="pageTitle">Dashboard</div>
+      <div class="topbar-actions">
+        <span class="clock" id="clock"></span>
+      </div>
+    </header>
+
+    <!-- DASHBOARD -->
+    <section id="page-dashboard" class="page active">
+      <div class="page-header">
+        <h1>Genel Bakış</h1>
+        <p class="subtitle">Finansal durumunuza hızlı erişim</p>
+      </div>
+      <div class="stat-grid" id="statGrid"></div>
+      <div class="dashboard-grid">
+        <div class="card">
+          <h3>Son Faturalar</h3>
+          <div id="recentInvoices" class="mini-list"></div>
+        </div>
+        <div class="card">
+          <h3>Yaklaşan Vadeler</h3>
+          <div id="upcomingDue" class="mini-list"></div>
+        </div>
+        <div class="card wide">
+          <h3>Aylık Gelir / Alacak</h3>
+          <canvas id="chartCanvas" height="80"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- FATURALAR -->
+    <section id="page-faturalar" class="page">
+      <div class="page-header">
+        <h1>Faturalar</h1>
+        <button class="btn-primary" onclick="openModal('fatura')">+ Yeni Fatura</button>
+      </div>
+      <div class="filters">
+        <input type="text" placeholder="Ara..." id="searchFatura" oninput="renderFaturalar()" />
+        <select id="filterDurum" onchange="renderFaturalar()">
+          <option value="">Tüm Durumlar</option>
+          <option value="beklemede">Beklemede</option>
+          <option value="odendi">Ödendi</option>
+          <option value="gecikti">Gecikti</option>
+          <option value="iptal">İptal</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table" id="faturaTable">
+          <thead>
+            <tr>
+              <th>No</th><th>Müşteri</th><th>Tutar</th><th>Tarih</th><th>Vade</th><th>Durum</th><th>İşlem</th>
+            </tr>
+          </thead>
+          <tbody id="faturaBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ÖDEMELER -->
+    <section id="page-odemeler" class="page">
+      <div class="page-header">
+        <h1>Ödemeler</h1>
+        <button class="btn-primary" onclick="openModal('odeme')">+ Yeni Ödeme</button>
+      </div>
+      <div class="filters">
+        <input type="text" placeholder="Ara..." id="searchOdeme" oninput="renderOdemeler()" />
+        <select id="filterYontem" onchange="renderOdemeler()">
+          <option value="">Tüm Yöntemler</option>
+          <option value="nakit">Nakit</option>
+          <option value="havale">Havale/EFT</option>
+          <option value="kredi">Kredi Kartı</option>
+          <option value="cek">Çek</option>
+          <option value="diger">Diğer</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Fatura No</th><th>Müşteri</th><th>Ödeme Tutarı</th><th>Tarih</th><th>Yöntem</th><th>Not</th><th>İşlem</th>
+            </tr>
+          </thead>
+          <tbody id="odemeBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- MÜŞTERİLER -->
+    <section id="page-musteriler" class="page">
+      <div class="page-header">
+        <h1>Müşteriler</h1>
+        <button class="btn-primary" onclick="openModal('musteri')">+ Yeni Müşteri</button>
+      </div>
+      <div class="filters">
+        <input type="text" placeholder="Ara..." id="searchMusteri" oninput="renderMusteriler()" />
+      </div>
+      <div class="musteri-grid" id="musteriGrid"></div>
+    </section>
+
+    <!-- RAPORLAR -->
+    <section id="page-raporlar" class="page">
+      <div class="page-header">
+        <h1>Raporlar</h1>
+      </div>
+      <div class="rapor-grid" id="raporGrid"></div>
+    </section>
+  </main>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+    <div class="modal" onclick="event.stopPropagation()" id="modalBox">
+      <div class="modal-header">
+        <h2 id="modalTitle">Yeni Kayıt</h2>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
