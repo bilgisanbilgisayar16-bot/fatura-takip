@@ -17,11 +17,16 @@ let currentPage = 'dashboard';
 let editTarget = null;
 
 // ── INIT ──────────────────────────────────
+// DOMContentLoaded'da sadece clock başlatılır.
+// initApp() Firebase auth sonrası çağrılır.
 window.addEventListener('DOMContentLoaded', () => {
-  seedDemoData();
   startClock();
-  navigate('dashboard');
 });
+
+function initApp() {
+  seedDemoData();
+  navigate('dashboard');
+}
 
 function seedDemoData() {
   if (DB.musteriler.length > 0) return; // zaten veri var
