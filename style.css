@@ -578,3 +578,105 @@ body {
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text2); }
+
+/* ── LOGIN EKRANI ── */
+.login-screen {
+  position: fixed; inset: 0;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  background-image: radial-gradient(ellipse at 20% 50%, rgba(201,162,39,.06) 0%, transparent 60%),
+                    radial-gradient(ellipse at 80% 20%, rgba(59,130,246,.05) 0%, transparent 50%);
+}
+
+.login-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 48px 40px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 40px 80px rgba(0,0,0,.4);
+  animation: modalIn .4s ease;
+}
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+.login-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  margin-bottom: 8px;
+}
+
+.login-sub {
+  color: var(--text2);
+  font-size: .88rem;
+  margin-bottom: 32px;
+  line-height: 1.5;
+}
+
+.btn-google {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: #fff;
+  border: none;
+  border-radius: 10px;
+  color: #333;
+  font-family: 'DM Sans', sans-serif;
+  font-size: .95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s;
+  margin-bottom: 16px;
+}
+.btn-google:hover { background: #f1f1f1; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,0,0,.2); }
+.btn-google:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+.login-error {
+  color: #f87171;
+  font-size: .82rem;
+  min-height: 20px;
+  margin-bottom: 8px;
+}
+
+.login-note {
+  color: var(--text2);
+  font-size: .75rem;
+  margin-top: 16px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  padding: 8px 4px 12px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+
+.btn-logout {
+  color: #f87171 !important;
+  border-color: rgba(239,68,68,.2) !important;
+}
+.btn-logout:hover {
+  border-color: var(--red) !important;
+  color: var(--red) !important;
+}
+
+#appScreen {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
